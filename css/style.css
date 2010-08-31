@@ -1,0 +1,168 @@
+@charset "utf-8";
+/* 
+html5doctor.com Reset Stylesheet
+http://code.google.com/p/html5resetcss/downloads/list
+v1.6
+Last Updated: 2010-08-18
+Author: Richard Clark - http://richclarkdesign.com 
+Twitter: @rich_clark
+*/
+
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.clearfix{display:inline-block;}
+* html .clearfix{height:1%;}
+.clearfix{display:block;}
+
+body {
+    line-height:1;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	color: #EEEEEE;
+	background: #000000;
+}
+#wrapper {
+	width: 900px;
+	margin: 0 auto 0;
+}
+#footer {
+	width: 898px;
+	margin: 0 auto 0;
+	clear:both;
+	padding:20px 0;
+	font-size: 11px;
+}
+#header {
+	margin-top: 60px;
+	padding-bottom: 30px;
+	background: #4d4d4d;
+	border: 1px solid #5c5c5c;
+}
+h1 {
+	font-size: 18px;
+	font-weight: bold;
+	text-shadow: 0 1px 2px #101010;
+	margin: 10px 20px 0;
+	padding: 0 0 10px;
+	border-bottom: 1px solid #444444;
+}
+h2 {
+	margin: 0 20px;
+	padding: 0 0 30px;
+	width: 300px;
+}
+#header p {
+	border-top: 1px solid #565656;
+	padding: 8px 0 6px;
+}
+#content {
+	margin: 1px 0;
+	border-top: 1px solid #313131;
+	border-bottom: 1px solid #313131;
+	background: #393939;
+}
+#footer {
+	background: #4d4d4d;
+	border: 1px solid #5c5c5c;
+}
+#footer p {
+	margin-bottom: 1.5em;
+}
+a, a:visited {
+    margin:0;
+    padding:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+	color: #EEEEEE;
+}
+a:hover {
+	text-decoration: none;
+}
+#userdata {
+	width: 420px;
+	margin: 20px 0 20px;
+}
+#userdata p {
+	margin-top:20px;
+}
+p {
+	margin: 0 20px 0.5em;
+}
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+form {
+	margin: 0 20px 0.5em;
+}
+form div {
+	padding-bottom: 10px;
+}
+label {
+	display: block;
+	padding: 6px 0;
+}
+input, select {
+    vertical-align:middle;
+	color:#FFFFFF;
+	background: #353535;
+	border:1px solid #000000;
+	font-size: 14px;
+	height:22px;
+	padding-left: 6px;
+}
+input.button {
+	width:114px;
+	height:26px;
+	text-align: center;
+	background:#5c5c5c;
+	cursor:pointer;
+	font-size: 14px;
+	font-weight: bold;
+	text-shadow: 0 1px 2px #101010;
+	text-transform: uppercase;
+}
+input.button:hover {
+	background:#606060;
+}
+#tableholder {
+	float:right;
+	width: 460px;
+	min-height: 100px;
+	max-height: 200px;
+	overflow: auto;
+	padding: 20px 1px;
+}
+table.rolls {
+}
+.rolls tr:hover {
+	background:#5c5c5c;
+}
+.rolls th, .rolls td {
+	padding: 2px 10px;
+}
+td.t {
+	min-width: 60px;
+}
+td.n, td.d, td.o {
+	text-align: center;
+}
