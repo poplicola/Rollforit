@@ -42,7 +42,6 @@ if ($action == "create") {
 	exit;
 }
 
-// Get the submitted username and save it as a session variable, then create a room if necessary
 if ($_POST['username'] || $_POST['createroom']) {
 	$username = htmlspecialchars($_POST['username'], ENT_QUOTES);
 	// Save the username to the session
@@ -53,22 +52,17 @@ if ($_POST['username'] || $_POST['createroom']) {
 		// Save the username to the session
 		$_SESSION['roomID'] = $roomID;
 		$path = get_path() . 'instance.php?id=' . $roomID;;
-		// Redirect
-		header("Location: $path");
-		// Make sure that code below does not get executed when we redirect
-		exit;
 	}
 }
 
-if (isset($_SESSION['username']) && isset($_SESSION['roomID'])) {
-	// If we have a username and a roomID, send the user to the room
-	// Ex: a user has clicked on a link to a room and has logged in, redirect to the room
-	$path = get_path() . 'instance.php?id=' . $_SESSION['roomID'];
-	// Redirect
-	header("Location: $path");
-	// Make sure that code below does not get executed when we redirect
-	exit;
-}?>
+// Get the submitted username and save it as a session variable, then create a room if necessary
+if ($_POST['username']) {
+	$username = htmlspecialchars($_POST['username'], ENT_QUOTES);
+	// Save the username to the session
+	$_SESSION['username'] = $username;
+}
+
+?>
 
 <?php include ('includes/header.php'); ?>
 
@@ -76,65 +70,100 @@ if (isset($_SESSION['username']) && isset($_SESSION['roomID'])) {
 
 <div id="wrapper" class="clearfix">
 
-	<div id="header">
-	
-		<h1>Please log in</h1>
-        <p>You can start rolling dice with just a username and a room ID.</p>
-
-	</div><!-- end #header -->
+	<section id="header">
+		<img src="images/rollforit.png" alt="Rollfor.it" class="logo" />
+	</section>
+	<!-- end #header -->
 
 <?php include ('includes/pagenav.php'); ?>
 
-	<div id="content">
+	<section id="content">
     
-<?php if (empty($_SESSION['username'])) { ?>
 
-    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-    <div>
-        <label for="username">Enter a username</label>
-	   	<input type="text" id="username" name="username" value="" />
-    </div>
-    <div>
-        <label for="roomID">Create a new room ID</label>
-    	<input type="checkbox" id="createroom" name="createroom" value="yes" />
-    </div>
-    <div>
-        <label for="roomID">Enter a room ID</label>
-    	<input type="text" id="roomID" name="roomID" value="<?php echo $_SESSION['roomID']; ?>" />
-    </div>
-    <div>
-        <input type="submit" class="button" id="submit" title="Submit" value="Submit" />
-    </div>
-    </form>
+		<header id="getrolling">Get rolling with just a username and a room ID.</header>
+		<section id="boxes">
+			<section id="one">
+				<header><h1>1. Create a Name</h1></header>
+				<form name="createname" action="" method="post">
+					<table width="280px">
+						<tbody>
+							<tr>
+								<td class="c1"><label for="username">Username</label></td>
+								<td><input type="text" name="username" id="username" value="<?php echo $username; ?>" /></td>
+							</tr>
+						</tbody>
+					</table>
+					<?php
+						if (!empty($roomID)) {
+							echo "<input type='hidden' value='" . $roomID . "' name='roomID' />";
+						}
+					?>
+					<input type="submit" value="Submit" title="Submit" class="button1" />
+				</form>
+			</section>
+			<section id="two">
+				<header><h1>2. Find a Room</h1></header>
+				<form name="findroom" action="" method="post">
+					<table width="280px">
+						<tbody>
+							<tr>
+								
+							</tr>
+							<tr>
+								<td class="c1"><label for="roomID">Room ID</label></td>
+								<td><input type="text" id="roomID" name="roomID" value="<?php echo $_SESSION['roomID']; ?>" /></td>
+							</tr>
+							<tr>
+								<td class="c1" colspan="2" style="padding:0 0 10px;text-align:center;"><strong>Or</strong></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td class="c1" style="padding:5px;background:#efefef;"><input type="checkbox" id="createroom" name="createroom" value="yes" /> <label for="roomID">Create a new room </label></td>
+							</tr>	
+						</tbody>
+					</table>
+					<?php
+						if (!empty($username)) {
+							echo "<input type='hidden' value='" . $username . "' name='username' />";
+						}
+					?>
+					<input type="submit" value="Submit" title="Submit" class="button1" />
+				</form>
+			</section>
+			<section id="three">
+				<header><h1>Start the Game</h1></header>
+					<table width="280px">
+						<tbody>
+							<tr>
+								<td class="c1"><strong>Username</strong></td>
+								<td><?php echo $username; ?></td>
+							</tr>
+							<tr>
+								<td class="c1"><strong>Room ID</strong></td>
+								<td><?php echo $roomID; ?></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<form name="startgame" action="
+									<?php
+										$path = get_path() . 'map.php?id=' . $roomID;;
+										echo $path;
+									?>
+									" method="post">
+										<input type="hidden" value="<?php $username; ?>" name="username">
+										<input type="hidden" value="<?php $roomID; ?>" name="roomID">
+										<input type="submit" value="Log In" class="button2" />
+									</form>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+			</section>
+			<div style="clear:both;"></div>
+		</section>   
     
-<?php } ?>    
-    
-<?php if (isset($_SESSION['username']) && !isset($_SESSION['roomID'])) {
-	// A user is logged in, but isn't in a room yet
-	
-	// Assign the variable $username from the session
-	$username = $_SESSION['username'];
-?>
-
-	<h2>Hello, <?php echo $username; ?></h2>
-    
-    <p>You aren't currently connected to a room.  You can choose to:</p>
-
-    <p><a href="<?php echo $_SERVER['PHP_SELF']; ?>?action=create">Create a room</a></p>
-	
-    <p>Join a room if you have an room ID</p>
-    <form action="instance.php" method="get">
-    <div>
-    	<input type="text" id="roomID" name="roomID" value="" />
-    <div>
-    </div>
-        <input type="submit" class="button" value="Submit" />
-    </div>
-    </form>
-	
-<?php } ?>
-   
-	</div><!-- end #content -->
+	<div style="clear:both;"></div>
+	</section><!-- end #content -->
 	
 </div><!-- end #wrapper -->
 

@@ -17,9 +17,11 @@ function create_room() {
 	// $roomID = date('ymd') . generateID();
 	global $link;
 	$roomID = generateID();
+	$rollDB = "rolls_" . $roomID;
+	$mapsDB = "maps_" . $roomID;
 	
 	// Construct the SQL to create table
-	$query = "CREATE TABLE IF NOT EXISTS `" . $roomID . "` (`timestamp` INT UNSIGNED, `username` VARCHAR(60), `num` TINYINT UNSIGNED, `die` TINYINT UNSIGNED, `outcome` SMALLINT UNSIGNED, INDEX (username)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+	$query = "CREATE TABLE IF NOT EXISTS `" . $rollDB . "` (`timestamp` INT UNSIGNED, `username` VARCHAR(60), `num` TINYINT UNSIGNED, `die` TINYINT UNSIGNED, `outcome` SMALLINT UNSIGNED, INDEX (username)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 	
 	// Execute the query
 	$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
@@ -33,11 +35,13 @@ function create_room() {
 function process_roll($username, $roomID, $num, $die) {
 	// Calculate the outcome of a dice roll and save it to the database
 	global $link;
+	$rollDB = "rolls_" . $roomID;
+	$mapsDB = "maps_" . $roomID;
 	for ($i=0; $i<$num; $i++) { 
 		$outcome += rand(1, $die);
 	}
 	
-	$query = sprintf("INSERT INTO `$roomID` (`timestamp`, `username`, `num`, `die`, `outcome`) VALUES ('%d','%s','%d','%d','%d')",
+	$query = sprintf("INSERT INTO `$rollDB` (`timestamp`, `username`, `num`, `die`, `outcome`) VALUES ('%d','%s','%d','%d','%d')",
 	time(),
 	mysql_real_escape_string($username, $link),
 	$_POST['num'],
@@ -52,8 +56,10 @@ function get_rolls($roomID, $link) {
 	// Get a list of rolls in the room
 //	$sql = sprintf("SELECT * FROM '%s'",
 //	mysql_real_escape_string($roomID, $link));
+	$rollDB = "rolls_" . $roomID;
+	$mapsDB = "maps_" . $roomID;
 
-	$query = "SELECT * FROM $roomID ORDER BY timestamp DESC";
+	$query = "SELECT * FROM $rollDB ORDER BY timestamp DESC";
 
 	$result = mysql_query($query, $link) or die(mysql_error());
 	
@@ -107,4 +113,5 @@ function deleteattachment($id) {
 	}
 	return $message;
 }
+
 ?>

@@ -1,9 +1,9 @@
 <?php
 // Set MySQL variables host , username , password
 $mysql_host = 'localhost';
-$mysql_user = 'alephst1_U0vBkhm';
-$mysql_password = 'P>g<JL#;c.3.';
-$mysql_database = 'alephst1_rollforit';
+$mysql_user = 'root';
+$mysql_password = 'maximus4';
+$mysql_database = 'rollforit';
 
 // Salt for password encryption
 //$salt = 'FGGrhIbzjtj2o';
