@@ -27,14 +27,3 @@ if(get_magic_quotes_gpc()) {
 <?php echo get_rolls($roomID, $link); ?>
 
 	</table>
-
-
-
-
-
-
-
-
-
-
-

@@ -46,10 +46,13 @@ window.onload = timedRefresh();
 
 <script>       
 	  $(function() {
-	    $("#draggable").draggable({
-	            drag: function(event,ui){ 
-	            $(this).html("Top: "+ ui.position.top + "<br />Left: "+ ui.position.left);
-	        }
+	    $(".draggable").draggable({
+			containment: 'parent',
+			stop: function(event,ui){
+				var xloc=ui.position.left;
+				var yloc=ui.position.top;
+				$.get('includes/charmoves.php', { x: xloc, y: yloc });
+			}
 	    });
 	});
 </script>

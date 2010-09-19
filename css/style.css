@@ -342,29 +342,34 @@ td.n, td.d, td.o {
 
 /** Map CSS **/
 
-#mapcontainer {
-	clear: both;
-	width: 600px;
-	float: left;
-	position: relative;
-}
-
 #map {
-	position: absolute;
+	float: left;
+	clear: both;
+	position: relative;
+	top: 0;
+	left: 0;
 	width: 600px;
 	height: 600px;
 	overflow: auto;
+	cursor: auto;
 }
 
 #map table, #map tr, #map td {
 	border: 1px solid #000;
 }
 
-#draggable {
+.draggable {
+	position: absolute;
+	z-index: 2;
+}
+
+.ui-draggable {
 	padding: 0.5em;
 	height: 30px;
 	width: 30px;
-	position: relative;
+	position: absolute;
+	top: 0;
+	left: 0;
 	z-index: 1;
 	background: red;
 }

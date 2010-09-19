@@ -36,14 +36,20 @@ if ($_POST['num'] && $_POST['die']) {
 	$outcome = process_roll($username, $roomID, $num, $die);
 }
 
-$themap = $_SESSION['themap'];
-
 ?>
 <?php include ('includes/header.php'); ?>
-
 <body>
 
 <div id="wrapper" class="clearfix">
+
+	<?php
+		$username=$_SESSION['username'];
+		
+		$query = "SELECT map FROM $roomID";
+		$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
+		$roomdata = mysql_fetch_row($result);
+		$themap = "uploaded/" . $roomdata[0];
+	?>
 
 	<div id="header">
 	
@@ -55,12 +61,11 @@ $themap = $_SESSION['themap'];
 <?php include ('includes/pagenav.php'); ?>
 
 	<div id="content" class="clearfix">
-		
-		<section id="mapcontainer">
-			<section id="map">
-				<?php echo "<img src=uploaded/" . $themap . " alt='the map' />"?>
-			</section>
-			<div id="draggable" class="ui-widget-content ui-draggable"></div>
+		<section id="map">
+			<?php
+				echo "<img src=" . $themap . " alt='the map' />";
+				char_tokens($roomID, $username, $link);
+			?>
 		</section>
 		
 		<section id="rolldata">

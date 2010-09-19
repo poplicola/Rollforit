@@ -98,6 +98,8 @@ if (isset($filename)) {
 			<?php
 				if (isset($themap) && $ok!=0) {
 					echo "<img src=uploaded/" . $themap . " alt='the map' />";
+					$query = "REPLACE INTO " . $roomID . " (map) VALUES ('" . $themap . "')";
+					$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
 				}
 			?>
 		</section>

@@ -19,12 +19,19 @@ function create_room() {
 	$roomID = generateID();
 	$rollDB = "rolls_" . $roomID;
 	$mapsDB = "maps_" . $roomID;
+	$roomdata = $roomID;
 	
 	// Construct the SQL to create table
 	$query = "CREATE TABLE IF NOT EXISTS `" . $rollDB . "` (`timestamp` INT UNSIGNED, `username` VARCHAR(60), `num` TINYINT UNSIGNED, `die` TINYINT UNSIGNED, `outcome` SMALLINT UNSIGNED, INDEX (username)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 	
+	$query2 = "CREATE TABLE IF NOT EXISTS `" . $mapsDB . "` (`username` VARCHAR(60), `color` VARCHAR(60), `xvar` SMALLINT UNSIGNED, `yvar` SMALLINT UNSIGNED, PRIMARY KEY (username), INDEX (username)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+	
+	$query3 = "CREATE TABLE IF NOT EXISTS `" . $roomdata . "` (`map` VARCHAR(60))";
+	
 	// Execute the query
 	$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
+	$result2 = mysql_query($query2, $link) or die("A MySQL error has occurred.<br />Query: " . $query2 . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
+	$result3 = mysql_query($query3, $link) or die("A MySQL error has occurred.<br />Query: " . $query3 . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
 	
 	// Save the roomID to the session
 	$_SESSION['roomID'] = $roomID;
@@ -71,6 +78,34 @@ function get_rolls($roomID, $link) {
 		echo '<td class="d">' . $row['die'] . '</td>';
 		echo '<td class="o">' . $row['outcome'] . '</td>';
 		echo "</tr>\n";
+	}
+}
+
+function char_tokens($roomID, $username, $link) {
+	$mapsDB = "maps_" . $roomID;
+	$query = "SELECT * FROM " . $mapsDB;
+	$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
+	
+	$query2 = "SELECT username FROM " . $mapsDB . " WHERE username= '" . $username . "'";
+	$result2 = mysql_query($query2, $link) or die("A MySQL error has occurred.<br />Query: " . $query2 . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
+	if(mysql_affected_rows()==0) {
+		$query3 = "INSERT INTO " . $mapsDB . " (xvar, yvar, username) VALUES ('0', '0', '".$username."')";
+		$result3 = mysql_query($query3, $link) or die("A MySQL error has occurred.<br />Query: " . $query3 . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
+	}
+	
+	$colors = array('red','blue','black','yellow','orange','green','lime','maroon','olive');
+	
+	while($row = mysql_fetch_array($result)) {
+		$userid=$row['username'];
+		$xvar=$row['xvar'];
+		$yvar=$row['yvar'];
+		if ($userid==$username) {
+			echo "<div class='draggable ui-widget-content ui-draggable " . $userid . "' style='left:" . $xvar . "px; top:" . $yvar . "px;background:" . $colors[$x] . ";'></div>";
+		} else {
+			echo "<div class='ui-widget-content ui-draggable " . $userid . "' style='left:" . $xvar . "px; top:" . $yvar . "px;background:" . $colors[$x] . ";'></div>";
+		}
+		echo $row['color'];
+		$x++;
 	}
 }
 
