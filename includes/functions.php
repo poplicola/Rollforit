@@ -17,16 +17,16 @@ function create_room() {
 	// $roomID = date('ymd') . generateID();
 	global $link;
 	$roomID = generateID();
+	$roomDB = "room_" . $roomID;
 	$rollDB = "rolls_" . $roomID;
 	$mapsDB = "maps_" . $roomID;
-	$roomdata = $roomID;
 	
 	// Construct the SQL to create table
 	$query = "CREATE TABLE IF NOT EXISTS `" . $rollDB . "` (`timestamp` INT UNSIGNED, `username` VARCHAR(60), `num` TINYINT UNSIGNED, `die` TINYINT UNSIGNED, `outcome` SMALLINT UNSIGNED, INDEX (username)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 	
-	$query2 = "CREATE TABLE IF NOT EXISTS `" . $mapsDB . "` (`username` VARCHAR(60), `color` VARCHAR(60), `xvar` SMALLINT UNSIGNED, `yvar` SMALLINT UNSIGNED, PRIMARY KEY (username), INDEX (username)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+	$query2 = "CREATE TABLE IF NOT EXISTS `" . $mapsDB . "` (`username` VARCHAR(60), `xvar` SMALLINT UNSIGNED, `yvar` SMALLINT UNSIGNED, PRIMARY KEY (username), INDEX (username)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 	
-	$query3 = "CREATE TABLE IF NOT EXISTS `" . $roomdata . "` (`map` VARCHAR(60))";
+	$query3 = "CREATE TABLE IF NOT EXISTS `" . $roomDB . "` (`map` VARCHAR(60), PRIMARY KEY (map), INDEX (map)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 	
 	// Execute the query
 	$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
@@ -81,31 +81,31 @@ function get_rolls($roomID, $link) {
 	}
 }
 
-function char_tokens($roomID, $username, $link) {
+function char_tokens($roomID, $username, $torf) {
+	global $link;
 	$mapsDB = "maps_" . $roomID;
-	$query = "SELECT * FROM " . $mapsDB;
-	$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
 	
 	$query2 = "SELECT username FROM " . $mapsDB . " WHERE username= '" . $username . "'";
 	$result2 = mysql_query($query2, $link) or die("A MySQL error has occurred.<br />Query: " . $query2 . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
+	// If user does not exist
 	if(mysql_affected_rows()==0) {
+		echo "POO";
 		$query3 = "INSERT INTO " . $mapsDB . " (xvar, yvar, username) VALUES ('0', '0', '".$username."')";
 		$result3 = mysql_query($query3, $link) or die("A MySQL error has occurred.<br />Query: " . $query3 . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
 	}
 	
-	$colors = array('red','blue','black','yellow','orange','green','lime','maroon','olive');
+	$query = "SELECT * FROM " . $mapsDB;
+	$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
 	
 	while($row = mysql_fetch_array($result)) {
 		$userid=$row['username'];
 		$xvar=$row['xvar'];
 		$yvar=$row['yvar'];
-		if ($userid==$username) {
-			echo "<div class='draggable ui-widget-content ui-draggable " . $userid . "' style='left:" . $xvar . "px; top:" . $yvar . "px;background:" . $colors[$x] . ";'></div>";
-		} else {
-			echo "<div class='ui-widget-content ui-draggable " . $userid . "' style='left:" . $xvar . "px; top:" . $yvar . "px;background:" . $colors[$x] . ";'></div>";
+		if ($userid==$username && $torf==0) {
+			echo "<div class='draggable ui-widget-content ui-draggable " . $userid . "' style='left:" . $xvar . "px; top:" . $yvar . "px;z-index:5;'>You</div>";
+		} elseif ($userid!=$username && $torf==1) {
+			echo "<div class='ui-widget-content ui-draggable " . $userid . "' style='left:" . $xvar . "px; top:" . $yvar . "px;'></div>";
 		}
-		echo $row['color'];
-		$x++;
 	}
 }
 
@@ -122,31 +122,6 @@ function get_path() {
 		$url .= '/';
 	}
 	return $url;
-}
-
-
-function deleteattachment($id) {
-	// Delete an attachment (screenshot, etc.) from the database, and unlink() the file
-	global $link;
-	global $target_path;
-	$query = sprintf("SELECT * FROM attachments WHERE servername = '%s'",
-	mysql_real_escape_string($id, $link));
-	$result = mysql_query($query) or die(mysql_error());
-	if (mysql_num_rows($result) >= 1) {
-		// Delete the record from the database
-		$query = sprintf("DELETE FROM attachments WHERE servername = '%s' LIMIT 1",
-		mysql_real_escape_string($id, $link));
-		$result = mysql_query($query) or die(mysql_error());
-		// Delete the file from the server
-		$thefile = $target_path . $id;
-		if (is_file("$thefile")) {
-			unlink("$thefile");
-		}
-		$message = "filedeleted";
-	} else {
-		$message = "filenotfound";
-	}
-	return $message;
 }
 
 ?>

@@ -38,16 +38,17 @@ $(document).ready(function(){
 <script>
 function timedRefresh() {
 /* Refresh the list of rolls every X seconds */
-	getExternalHTML('includes/ajax-instance-history-html.php?roomID=<?php echo $roomID; ?>', 'dicehistory');
+	getExternalHTML('includes/ajax-instance-map-html.php?roomID=<?php echo $roomID; ?>', 'theirtokens');
+	/*getExternalHTML('includes/ajax-instance-history-html.php?roomID=<?php echo $roomID; ?>', 'dicehistory');*/
 	var t=setTimeout("timedRefresh()",5000);
 }
 window.onload = timedRefresh();
 </script>
 
-<script>       
+<script>
 	  $(function() {
 	    $(".draggable").draggable({
-			containment: 'parent',
+			containment: '#map',
 			stop: function(event,ui){
 				var xloc=ui.position.left;
 				var yloc=ui.position.top;

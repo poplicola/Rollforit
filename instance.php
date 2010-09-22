@@ -45,9 +45,9 @@ if ($_POST['num'] && $_POST['die']) {
 	<?php
 		$username=$_SESSION['username'];
 		
-		$query = "SELECT map FROM $roomID";
-		$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
-		$roomdata = mysql_fetch_row($result);
+		$mapquery = "SELECT map FROM room_$roomID";
+		$mapresult = mysql_query($mapquery, $link) or die("A MySQL error has occurred.<br />Query: " . $mapquery . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
+		$roomdata = mysql_fetch_row($mapresult);
 		$themap = "uploaded/" . $roomdata[0];
 	?>
 
@@ -62,10 +62,9 @@ if ($_POST['num'] && $_POST['die']) {
 
 	<div id="content" class="clearfix">
 		<section id="map">
-			<?php
-				echo "<img src=" . $themap . " alt='the map' />";
-				char_tokens($roomID, $username, $link);
-			?>
+			<?php echo "<img src=" . $themap . " alt='the map' />"; ?>
+			<div id="yourtoken"><?php char_tokens($roomID, $username, 0); ?></div>
+			<div id="theirtokens"></div>
 		</section>
 		
 		<section id="rolldata">

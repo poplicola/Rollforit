@@ -359,6 +359,7 @@ td.n, td.d, td.o {
 }
 
 .draggable {
+	cursor: pointer;
 	position: absolute;
 	z-index: 2;
 }

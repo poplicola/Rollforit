@@ -8,6 +8,7 @@ header("Expires: Mon, 26 Jul 2010 05:00:00 GMT");
 require ('config.php');
 require ('dbconnect.php');
 require ('functions.php');
+require ('session.php');
 
 if(get_magic_quotes_gpc()) {
 	$roomID = stripslashes(htmlspecialchars($_GET['roomID'], ENT_QUOTES));
@@ -15,13 +16,14 @@ if(get_magic_quotes_gpc()) {
 	$roomID = htmlspecialchars($_GET['roomID'], ENT_QUOTES);
 }
 ?>
+
 <?php
 	$username=$_SESSION['username'];
+	$roomDB="room_" . $roomID;
 	
-	$query = "SELECT map FROM $roomID";
+	$query = "SELECT map FROM $roomDB";
 	$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
 	$roomdata = mysql_fetch_row($result);
 	$themap = "uploaded/" . $roomdata[0];
-	
-	
+	char_tokens($roomID, $username, 1);
 ?>

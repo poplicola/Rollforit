@@ -28,7 +28,7 @@ if ($action == "leaveroom") {
 }
 
 $pagename = 'Room ' . $roomID;
-$path = get_path() . 'instance.php?id=' . $_SESSION['roomID'];
+$path = get_path() . 'instance.php?id=' . $roomID;
 
 $filename = $_FILES['mapload'];
 
@@ -36,7 +36,6 @@ if (isset($filename)) {
 	$ext = strtolower(strrchr($filename['name'], '.'));
 	$newfilename = $roomID . $ext;
 	$themap = $newfilename;
-	$_SESSION['themap']=$themap;
 	// Process map file
 	$target = "uploaded/";
 	$target = $target . $newfilename;
@@ -60,6 +59,8 @@ if (isset($filename)) {
 		if(move_uploaded_file($_FILES['mapload']['tmp_name'], $target)) {
 			echo "The file ". basename( $_FILES['mapload']['name']). " has been uploaded";
 			$map = $_FILES['mapload']['name'];
+			$query = "REPLACE INTO room_" . $roomID . " (map) VALUES ('" . $themap . "')";
+			$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
 		} else {
 			echo "Sorry, there was a problem uploading your file.";
 		}
@@ -98,8 +99,6 @@ if (isset($filename)) {
 			<?php
 				if (isset($themap) && $ok!=0) {
 					echo "<img src=uploaded/" . $themap . " alt='the map' />";
-					$query = "REPLACE INTO " . $roomID . " (map) VALUES ('" . $themap . "')";
-					$result = mysql_query($query, $link) or die("A MySQL error has occurred.<br />Query: " . $query . "<br />Error: (" . mysql_errno() . ") " . mysql_error());
 				}
 			?>
 		</section>
