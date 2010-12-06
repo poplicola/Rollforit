@@ -24,7 +24,7 @@ function create_room() {
 	// Construct the SQL to create table
 	$query = "CREATE TABLE IF NOT EXISTS `" . $rollDB . "` (`timestamp` INT UNSIGNED, `username` VARCHAR(60), `num` TINYINT UNSIGNED, `die` TINYINT UNSIGNED, `outcome` SMALLINT UNSIGNED, INDEX (username)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 	
-	$query2 = "CREATE TABLE IF NOT EXISTS `" . $mapsDB . "` (`username` VARCHAR(60), `xvar` SMALLINT UNSIGNED, `yvar` SMALLINT UNSIGNED, PRIMARY KEY (username), INDEX (username)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+	$query2 = "CREATE TABLE IF NOT EXISTS `" . $mapsDB . "` (`username` VARCHAR(60), `xvar` SMALLINT UNSIGNED, `yvar` SMALLINT UNSIGNED, `role` TINYINT UNSIGNED, PRIMARY KEY (username), INDEX (username)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 	
 	$query3 = "CREATE TABLE IF NOT EXISTS `" . $roomDB . "` (`map` VARCHAR(60), PRIMARY KEY (map), INDEX (map)) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 	
