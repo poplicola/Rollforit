@@ -2,7 +2,7 @@
 // Set MySQL variables host , username , password
 $mysql_host = 'localhost';
 $mysql_user = 'root';
-$mysql_password = 'maximus4';
+$mysql_password = 'PASSWORD';
 $mysql_database = 'rollforit';
 
 // Salt for password encryption
